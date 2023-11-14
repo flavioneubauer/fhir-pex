@@ -1,0 +1,14 @@
+    ;do $System.OBJ.LoadDir("/opt/irisbuild/src","ck",,1)
+
+    zn "%SYS"
+    Do ##class(Security.Users).UnExpireUserPasswords("*")
+
+    zn "USER"
+    zpm "install git-source-control"
+    do ##class(%Studio.SourceControl.Interface).SourceControlClassSet("SourceControl.Git.Extension")
+    zpm "install passwordless"
+    zpm "install objectscript-json-trace-viewer"
+
+
+    zpm "load /home/irisowner/dev/ -dev -v":1:1
+    halt
