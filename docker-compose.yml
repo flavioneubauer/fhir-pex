@@ -1,16 +1,70 @@
-version: '3.6'
+version: "2.2"
 services:
-  iris:
+  jgw:
+    image: intersystemsdc/pexoperation:latest
     environment:
-      - SAMPLE_TOKEN=${SAMPLE_TOKEN}
+      - JVMARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
     build:
-      context: .
+      context: java
       dockerfile: Dockerfile
+      args:
+        IRIS_IMAGE: ${IRIS_IMAGE}
     restart: always
-    command: --check-caps false --ISCAgent false
     ports:
-      - 1972
-      - 52795:52773
-      - 53773
-    volumes:
-      - ./:/home/irisowner/dev/
+      - 55555:55555
+      - 5005:5005
+
+  iris:
+    image: intersystemsdc/pexdemo:latest
+    command: --check-caps false
+    restart: always
+    cpuset: "0-1"
+    build:
+      context: iris
+      dockerfile: Dockerfile
+      args:
+        IRIS_IMAGE: ${IRIS_IMAGE}
+    ports:
+      - 52774:52773
+      - 1973:1972
+
+  zookeeper:
+    image: 'confluentinc/cp-zookeeper:5.3.1-1'
+    hostname: 'zookeeper'
+    ports:
+      - 2181:2181
+    environment:
+      - 'ZOOKEEPER_CLIENT_PORT=2181'
+      - 'ZOOKEEPER_TICK_TIME=2000'
+    restart: 'on-failure'
+
+  kafka:
+    image: 'confluentinc/cp-kafka:5.3.1-1'
+    hostname: 'kafka'
+    depends_on:
+      - 'zookeeper'
+    ports:
+      - 9092:9092
+#      - 9999:9999
+    environment:
+      - 'KAFKA_BROKER_ID=1'
+      - 'KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181'
+      - 'KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:29092,PLAINTEXT_HOST://172.17.111.209:9092'
+      - 'KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      - 'KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT'
+      - 'KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1'
+      - 'KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1'
+      - 'KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1'
+#      - 'KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.net.preferIPv4Stack=true -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.rmi.port=9999 -Djava.rmi.server.hostname=ip here'
+    restart: 'on-failure'
+
+  kafka-manager:
+    image: 'eduard93/kafka-manager-demo:latest'
+    hostname: 'kafka-manager'
+    depends_on:
+      - 'kafka'
+    environment:
+      - 'KAFKA_SERVERS_URL=kafka:29092'
+    ports:
+      - 8082:8082
+    restart: 'on-failure'
