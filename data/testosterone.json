@@ -1,0 +1,40 @@
+{
+    "resourceType": "Observation",
+    "id": "3a8c7d54-1a2b-4c8f-b54a-3d2a7efc98c9",
+    "status": "final",
+    "category": [
+      {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+            "code": "laboratory",
+            "display": "laboratory"
+          }
+        ]
+      }
+    ],
+    "code": {
+      "coding": [
+        {
+          "system": "http://loinc.org",
+          "code": "59462-2",
+          "display": "Testosterone"
+        }
+      ],
+      "text": "Testosterone"
+    },
+    "subject": {
+      "reference": "urn:uuid:274f5452-2a39-44c4-a7cb-f36de467762e"
+    },
+    "encounter": {
+      "reference": "urn:uuid:100b4a8f-5c14-4192-a78f-7276abdc4bc3"
+    },
+    "effectiveDateTime": "2022-05-15T08:45:00+00:00",
+    "issued": "2022-05-15T08:45:00.123+00:00",
+    "valueQuantity": {
+      "value": 550,
+      "unit": "ng/dL",
+      "system": "http://unitsofmeasure.org",
+      "code": "ng/dL"
+    }
+}
