@@ -107,7 +107,7 @@ public class KafkaOperation extends BusinessOperation {
                     String quarantineRuleValue = quarantineRule.getString(2);
                     LOGINFO("quarantine rule reference/value: " + quarantineRuleReference + quarantineRuleValue);
                     if (quarantineObservation(quarantineRuleReference, quarantineRuleValue, fhir.path("valueQuantity").path("value").asText() )){
-                        return "quarantine_observation";
+                        return "observation_quarantine";
                     }
                 }
 
