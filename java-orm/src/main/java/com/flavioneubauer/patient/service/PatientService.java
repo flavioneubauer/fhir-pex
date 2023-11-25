@@ -19,7 +19,7 @@ public class PatientService {
 	EventBus eventBus;
 
 	@Transactional
-	public void addObservation(String id, QuarentineObservation quarentineObservation) {
+	public Patient addObservation(String id, QuarentineObservation quarentineObservation) {
 		Optional<Patient> patientOptional = Patient.find("reference = ?1", quarentineObservation.getSubject()
 						.getReference())
 				.firstResultOptional();
@@ -29,7 +29,9 @@ public class PatientService {
 					.add(observationMapperService.fromQuarentine(quarentineObservation));
 			patient.persistAndFlush();
 			eventBus.publish("observation-changed", patient.getId());
+			return patient;
 		}
+		return null;
 	}
 
 }

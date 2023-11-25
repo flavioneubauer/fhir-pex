@@ -1,13 +1,14 @@
 package com.flavioneubauer.quarentine.service;
 
-import com.flavioneubauer.patient.model.Patient;
 import com.flavioneubauer.patient.service.PatientService;
+import com.flavioneubauer.quarentine.model.MonitorEventDto;
 import com.flavioneubauer.quarentine.model.QuarentineObservation;
 import io.vertx.core.eventbus.EventBus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import org.eclipse.microprofile.reactive.messaging.*;
+import org.eclipse.microprofile.reactive.messaging.Incoming;
+import org.eclipse.microprofile.reactive.messaging.Message;
 
 import java.util.concurrent.CompletionStage;
 
@@ -17,15 +18,21 @@ public class QuarentineObservationEventListener {
 	@Inject
 	PatientService patientService;
 
+	@Inject
+	EventBus eventBus;
+
 	@Transactional
 	@Incoming("observation_quarantine")
 	public CompletionStage<Void> onIncomingMessage(Message<QuarentineObservation> quarentineObservationMessage) {
-
-		System.out.println(quarentineObservationMessage.getPayload());
 		var quarentineObservation = quarentineObservationMessage.getPayload();
-		var patientId = quarentineObservation.getSubject().getReference();
-		patientService.addObservation(patientId, quarentineObservation);
-		// enviar para o llm o peso e colesterol para avaliar se é um risco alto ou baixo
+		var patientId = quarentineObservation.getSubject()
+				.getReference();
+		var patient = patientService.addObservation(patientId, quarentineObservation);
+		// passar para a IA uma lista de exames e os dados do paciente e pedir um próximo exame
+		eventBus.publish("monitor", MonitorEventDto.builder()
+				.id(patient.getId())
+				.message(" is on quarentine list by observation ." + quarentineObservation.getCode()
+						.getText()).build());
 		return quarentineObservationMessage.ack();
 	}
 

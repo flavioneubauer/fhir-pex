@@ -3,8 +3,6 @@
 <head>
     <meta charset="utf-8"/>
     <title>FHIR Monitor</title>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://unpkg.io/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
     <script src='https://unpkg.io/@vertx/eventbus-bridge-client.js@1.0.0-1/vertx-eventbus.js'></script>
 </head>
@@ -12,16 +10,21 @@
 
 <h1>FHIR Monitor</h1>
 
-<p><strong>Last Tick:</strong> <span id="tick"></span></p>
+<div id="container"></div>
 
 </body>
 <script>
     var eb = new EventBus('http://localhost:8080/eventbus');
     eb.enableReconnect(true);
+
+    function askAI(id) {
+        console.log('asking AI for id ' + id);
+    }
+
     eb.onopen = function () {
         eb.registerHandler('monitor', function (error, message) {
             console.log('uhuu chegou',error, message);
-            $("#tick").html(JSON.stringify(message));
+            document.getElementById('container').innerHTML += '<p>Patient ' +  message.body.id + message.body.message + '<button onclick="askAI(' + message.body.id + ')">Ask for recommendation</button></p>';
         });
     }
 </script>

@@ -1,5 +1,6 @@
 package com.flavioneubauer.patient.service;
 
+import com.flavioneubauer.quarentine.model.MonitorEventDto;
 import io.quarkus.vertx.ConsumeEvent;
 import io.vertx.core.Vertx;
 import io.vertx.ext.bridge.PermittedOptions;
@@ -22,8 +23,8 @@ public class PatientMonitor {
 	}
 
 	@ConsumeEvent(value = ADDRESS)
-	public void listen(String id){
-		log.info("new message! + " + id);
+	public void listen(MonitorEventDto monitorEventDto){
+		log.info("new message! + " + monitorEventDto);
 	}
 
 	public void start(@Observes Router router){

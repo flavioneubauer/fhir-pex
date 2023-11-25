@@ -16,7 +16,15 @@ public class ObservationMapperService {
 				.iterator()
 				.next()
 				.getCode());
-		observation.setMeasure(quarentineObservation.getValueQuantity().getValue().toString());
+		if(quarentineObservation.getValueQuantity() != null){
+			observation.setMeasure(quarentineObservation.getValueQuantity().getValue().toString());
+		}else if(quarentineObservation.getValueCodeableConcept() != null){
+			observation.setMeasure(quarentineObservation.getValueCodeableConcept()
+					.getCoding()
+					.iterator()
+					.next()
+					.getDisplay());
+		}
 		observation.setTimestamp(LocalDateTime.now());
 		return observation;
 	}

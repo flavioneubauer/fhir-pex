@@ -10,4 +10,5 @@ public class QuarentineObservation {
 	private ObservationCode code;
 	private Subject subject;
 	private ValueQuantity valueQuantity;
+	private ObservationCode valueCodeableConcept;
 }
