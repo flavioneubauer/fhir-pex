@@ -3,10 +3,14 @@ package dc.rmq;
 import com.intersystems.enslib.pex.*;
 import com.intersystems.jdbc.IRISObject;
 import com.intersystems.jdbc.IRIS;
+import com.intersystems.jdbc.IRISList;
 import com.intersystems.gateway.GatewayContext;
 
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.*;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -53,14 +57,14 @@ public class KafkaOperation extends BusinessOperation {
 
         // Create record
         String value = req.getString("Text");
-        String topic = req.getString("Topic");
+        String topic = getTopicPush(req);
         final ProducerRecord<Long, String> record = new ProducerRecord<>(topic, value);
 
         // Send new record
         RecordMetadata metadata = producer.send(record).get();
 
         // Return record info
-        IRISObject response = (IRISObject)(iris.classMethodObject("Ens.StringContainer","%New",metadata.offset()));
+        IRISObject response = (IRISObject)(iris.classMethodObject("Ens.StringContainer","%New",topic+"|"+metadata.offset()));
         return response;
     }
 
@@ -79,4 +83,59 @@ public class KafkaOperation extends BusinessOperation {
          }
         return new KafkaProducer<>(props);
     }
+
+    private String getTopicPush(IRISObject req){
+
+
+        String value = req.getString("Text");
+
+        LOGINFO("Observation Full Text: " + value);
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode fhir = objectMapper.readTree(value);
+
+            JsonNode codingArray = fhir.path("code").path("coding");
+            for (JsonNode coding : codingArray) {
+                String code = coding.path("code").asText();
+                String system = coding.path("system").asText();
+                LOGINFO("validating rule to: " + code + " - " + system);
+
+                IRISList quarantineRule = iris.getIRISList("quarantineRule",code,system);
+                if (quarantineRule != null){
+                    LOGINFO("Found rule: " + code + " - " + system);
+                    String quarantineRuleReference = quarantineRule.getString(1);
+                    String quarantineRuleValue = quarantineRule.getString(2);
+                    LOGINFO("quarantine rule reference/value: " + quarantineRuleReference + quarantineRuleValue);
+                    if (quarantineObservation(quarantineRuleReference, quarantineRuleValue, fhir.path("valueQuantity").path("value").asText() )){
+                        return "quarantine_observation";
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "observation_pass";
+    }
+
+    private boolean quarantineObservation(String reference, String value, String observationValue) {
+        double numericValue = Double.parseDouble(value);
+        double numericObservationValue = Double.parseDouble(observationValue);
+
+        if ("<".equals(reference)) {
+            return numericObservationValue < numericValue;
+        }
+        else if (">".equals(reference)) {
+            return numericObservationValue > numericValue;
+        }
+        else if ("<=".equals(reference)) {
+            return numericObservationValue <= numericValue;
+        }
+        else if (">=".equals(reference)) {
+            return numericObservationValue >= numericValue;
+        }
+        
+        return false;
+    }
+
 }
