@@ -1,31 +1,35 @@
 package com.flavioneubauer.patient.model;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Setter
+@Getter
+@EqualsAndHashCode(of = {"id"})
 @Entity
-public class Patient {
+public class Patient extends PanacheEntityBase {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	private String name;
+	private Double weight;
 
+	@Column(nullable = false)
+	private String reference;
 
-	public Long getId() {
-		return id;
-	}
+	private boolean smoke;
+	private boolean drinks;
+	private Integer phisicalActivitiesPerWeek;
+	private String bloodPreasure;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+	@OneToMany(cascade = CascadeType.PERSIST)
+	private List<Observation> observationList = new ArrayList<>();
 }
