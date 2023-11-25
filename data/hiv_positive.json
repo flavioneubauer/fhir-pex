@@ -1,0 +1,36 @@
+{
+  "resourceType": "Observation",
+  "id": "exemplo-hiv-positivo",
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "94531-1",
+        "display": "HIV 1 and 2 antibody panel - Serum or Plasma"
+      }
+    ],
+    "text": "HIV Test"
+  },
+  "subject": {
+    "reference": "Patient/12345",
+    "display": "John Doe"
+  },
+  "effectiveDateTime": "2023-11-25T10:30:00-05:00",
+  "performer": [
+    {
+      "reference": "Practitioner/67890",
+      "display": "Dr. Jane Smith"
+    }
+  ],
+  "valueCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "10828004",
+        "display": "Positive"
+      }
+    ],
+    "text": "Positive"
+  }
+}

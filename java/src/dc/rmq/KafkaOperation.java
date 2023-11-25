@@ -84,8 +84,7 @@ public class KafkaOperation extends BusinessOperation {
         return new KafkaProducer<>(props);
     }
 
-    private String getTopicPush(IRISObject req){
-
+    private String getTopicPush(IRISObject req) {
 
         String value = req.getString("Text");
 
@@ -103,10 +102,7 @@ public class KafkaOperation extends BusinessOperation {
                 IRISList quarantineRule = iris.getIRISList("quarantineRule",code,system);
                 if (quarantineRule != null){
                     LOGINFO("Found rule: " + code + " - " + system);
-                    String quarantineRuleReference = quarantineRule.getString(1);
-                    String quarantineRuleValue = quarantineRule.getString(2);
-                    LOGINFO("quarantine rule reference/value: " + quarantineRuleReference + quarantineRuleValue);
-                    if (quarantineObservation(quarantineRuleReference, quarantineRuleValue, fhir.path("valueQuantity").path("value").asText() )){
+                    if (quarantineObservation(quarantineRule, fhir )){
                         return "observation_quarantine";
                     }
                 }
@@ -115,10 +111,26 @@ public class KafkaOperation extends BusinessOperation {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return "observation_pass";
     }
 
-    private boolean quarantineObservation(String reference, String value, String observationValue) {
+    private boolean quarantineObservation(IRISList quarantineRule, JsonNode fhir) {
+
+        String quarantineRuleReference = quarantineRule.getString(1);
+        if  ("valueCodeableConcept".equals(quarantineRuleReference)){
+            String quarantineRuleCode = quarantineRule.getString(2);
+            String quarantineRuleSystem = quarantineRule.getString(3);
+
+            return quarantineValueCodeableConcept(quarantineRuleCode, quarantineRuleSystem, fhir);
+        }
+
+        String quarantineRuleValue = quarantineRule.getString(2);
+        return quarantineValueQuantity(quarantineRuleReference, quarantineRuleValue, fhir.path("valueQuantity").path("value").asText());
+    }
+
+    private boolean quarantineValueQuantity(String reference, String value, String observationValue) {
+        LOGINFO("quarantine rule reference/value: " + reference + "/" + value);
         double numericValue = Double.parseDouble(value);
         double numericObservationValue = Double.parseDouble(observationValue);
 
@@ -135,6 +147,22 @@ public class KafkaOperation extends BusinessOperation {
             return numericObservationValue >= numericValue;
         }
         
+        return false;
+    }
+
+    private boolean quarantineValueCodeableConcept(String ruleCode, String ruleSystem, JsonNode fhir) {
+        LOGINFO("quarantine rule valueCodeableConcept ruleCode/ruleSystem: " + ruleCode + "/" + ruleSystem);
+
+        JsonNode codingArray = fhir.path("valueCodeableConcept").path("coding");
+        for (JsonNode coding : codingArray) {
+            String fhirCode = coding.path("code").asText();
+            String fhirSystem = coding.path("system").asText();
+
+            if (fhirCode.equals(ruleCode) && fhirSystem.equals(ruleSystem)){
+                return true;
+            }
+        }
+
         return false;
     }
 
