@@ -51,12 +51,15 @@ U.I:
 
 ### Other ports:
 
-- SuperServer: 51773
+- SuperServer: 51774
 - Java Gateway: 55555
 - Zookeeper: 2181
 - Kafka: 9092
 
-### Video online
+### Video demo
 
+[VIDEO](https://www.youtube.com/watch?v=73vGRVbndi8)
 
-
+### authors
+- [Davi Massaru Teixeira Muta](https://community.intersystems.com/user/davi-massaru-teixeira-muta)
+- [Flavio Neubauer](https://community.intersystems.com/user/flavio-neubauer)
