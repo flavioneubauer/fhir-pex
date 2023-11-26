@@ -28,11 +28,16 @@ public class QuarentineObservationEventListener {
 		var patientId = quarentineObservation.getSubject()
 				.getReference();
 		var patient = patientService.addObservation(patientId, quarentineObservation);
-		eventBus.publish("monitor", MonitorEventDto.builder()
-				.id(patient.getId())
-				.message(" is on quarentine list by observation ." + quarentineObservation.getCode()
-						.getText()).build());
+		publishSockJsEvent(patient.getId(), quarentineObservation.getCode()
+				.getText());
 		return quarentineObservationMessage.ack();
+	}
+
+	private void publishSockJsEvent(Long patientId, String text) {
+		eventBus.publish("monitor", MonitorEventDto.builder()
+				.id(patientId)
+				.message(" is on quarentine list by observation ." + text)
+				.build());
 	}
 
 }

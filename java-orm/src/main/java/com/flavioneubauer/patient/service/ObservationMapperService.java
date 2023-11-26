@@ -11,15 +11,16 @@ public class ObservationMapperService {
 
 	public Observation fromQuarentine(QuarentineObservation quarentineObservation) {
 		var observation = new Observation();
-		observation.setType(quarentineObservation.getCode()
+		observation.setName(quarentineObservation.getCode().getText());
+		observation.setCode(quarentineObservation.getCode()
 				.getCoding()
 				.iterator()
 				.next()
 				.getCode());
 		if(quarentineObservation.getValueQuantity() != null){
-			observation.setMeasure(quarentineObservation.getValueQuantity().getValue().toString());
+			observation.setValue(quarentineObservation.getValueQuantity().getValue().toString());
 		}else if(quarentineObservation.getValueCodeableConcept() != null){
-			observation.setMeasure(quarentineObservation.getValueCodeableConcept()
+			observation.setValue(quarentineObservation.getValueCodeableConcept()
 					.getCoding()
 					.iterator()
 					.next()

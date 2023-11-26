@@ -32,7 +32,7 @@
     "effectiveDateTime": "2019-09-08T15:32:17+00:00",
     "issued": "2019-09-08T15:32:17.188+00:00",
     "valueQuantity": {
-      "value": 301.81,
+      "value": 185.81,
       "unit": "mg/dL",
       "system": "http://unitsofmeasure.org",
       "code": "mg/dL"

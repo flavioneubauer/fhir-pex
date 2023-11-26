@@ -5,6 +5,7 @@ import com.flavioneubauer.patient.service.PatientRecomendationService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 
 @Path("patients")
 public class PatientResource {
@@ -13,7 +14,8 @@ public class PatientResource {
 	PatientRecomendationService patientRecomendationService;
 
 	@GET
-	public PatientRecomendationDto getRecomendedExame(Long id){
+	@Path("{patientId}/recomendations")
+	public PatientRecomendationDto getRecomendedExame(@PathParam("patientId") Long id){
 		return patientRecomendationService.getRecomendation(id);
 	}
 }

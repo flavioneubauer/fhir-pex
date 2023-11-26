@@ -1,26 +1,22 @@
 package com.flavioneubauer.patient.service;
 
-import com.flavioneubauer.patient.model.Observation;
+import java.util.Optional;
+
 import com.flavioneubauer.patient.model.Patient;
 import com.flavioneubauer.quarentine.model.QuarentineObservation;
-import dev.langchain4j.agent.tool.Tool;
+
 import io.vertx.core.eventbus.EventBus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
+@Slf4j
 @ApplicationScoped
 public class PatientService {
 
 	@Inject
 	ObservationMapperService observationMapperService;
-
-	@Inject
-	EventBus eventBus;
 
 	@Transactional
 	public Patient addObservation(String id, QuarentineObservation quarentineObservation) {
@@ -32,22 +28,8 @@ public class PatientService {
 			patient.getObservationList()
 					.add(observationMapperService.fromQuarentine(quarentineObservation));
 			patient.persistAndFlush();
-			eventBus.publish("observation-changed", patient.getId());
 			return patient;
 		}
 		return null;
 	}
-
-	@Tool("get patient anamnesis information for patient id")
-	public Patient getAnamenisis(Long id){
-		Patient patient = Patient.findById(id);
-		return patient;
-	}
-
-	@Tool("get patient exams data for patient id")
-	public List<Observation> getObservations(Long id){
-		Patient patient = Patient.findById(id);
-		return patient.getObservationList();
-	}
-
 }

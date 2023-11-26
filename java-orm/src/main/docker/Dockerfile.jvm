@@ -77,16 +77,22 @@
 #   accessed directly. (example: "foo.example.com,bar.example.com")
 #
 ###
-FROM registry.access.redhat.com/ubi8/openjdk-17:1.17
+FROM registry.access.redhat.com/ubi8/openjdk-17:1.17 as builder
+USER root
+RUN  mkdir /app
+COPY . /app/.
+WORKDIR /app
+RUN ./mvnw clean package -DskipTests
+
+FROM registry.access.redhat.com/ubi8/openjdk-17:1.17 as image
 
 ENV LANGUAGE='en_US:en'
 
-
 # We make four distinct layers so if there are application changes the library layers can be re-used
-COPY --chown=185 target/quarkus-app/lib/ /deployments/lib/
-COPY --chown=185 target/quarkus-app/*.jar /deployments/
-COPY --chown=185 target/quarkus-app/app/ /deployments/app/
-COPY --chown=185 target/quarkus-app/quarkus/ /deployments/quarkus/
+COPY --chown=185 --from=builder /app/target/quarkus-app/lib/ /deployments/lib/
+COPY --chown=185 --from=builder /app/target/quarkus-app/*.jar /deployments/
+COPY --chown=185 --from=builder /app/target/quarkus-app/app/ /deployments/app/
+COPY --chown=185 --from=builder /app/target/quarkus-app/quarkus/ /deployments/quarkus/
 
 EXPOSE 8080
 USER 185

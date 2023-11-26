@@ -13,7 +13,7 @@
     "text": "HIV Test"
   },
   "subject": {
-    "reference": "Patient/12345",
+    "reference": "urn:uuid:274f5452-2a39-44c4-a7cb-f36de467762e",
     "display": "John Doe"
   },
   "effectiveDateTime": "2023-11-25T10:30:00-05:00",
