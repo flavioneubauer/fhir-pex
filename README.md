@@ -18,7 +18,7 @@ The "Observation" exams with code "59462-2" and system "http://loinc.org", in th
 the same behavior can be done for observations that use valueCodeableConcept
 
 ```
-set ^quarantineRule("94531-1","http://loinc.org") = $LB("valueCodeableConcept","10828004", "http://snomed.info/sct") \
+set ^quarantineRule("94531-1","http://loinc.org") = $LB("valueCodeableConcept","10828004", "http://snomed.info/sct") 
 ```
 
 
