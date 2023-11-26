@@ -71,12 +71,14 @@ U.I:
 - Eco Kafka Manager: http://localhost:8082/
 - Monitor quarantine: http://localhost:8080/
 
-### Other ports:
+### All ports:
 
 - SuperServer: 51774
 - Java Gateway: 55555
 - Zookeeper: 2181
 - Kafka: 9092
+- Kafka Manager: 8082
+- quarkus backend: 8082
 
 ### Video demo
 
