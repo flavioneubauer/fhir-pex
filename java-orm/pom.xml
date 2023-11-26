@@ -18,6 +18,7 @@
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.1.2</surefire-plugin.version>
         <lombok.version>1.18.26</lombok.version>
+        <quarkus.langchain4j.version>0.1.0</quarkus.langchain4j.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -63,11 +64,11 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-rest-client-reactive-jackson</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>io.quarkiverse.langchain4j</groupId>-->
-<!--            <artifactId>quarkus-langchain4j</artifactId>-->
-<!--            <version>0.1.0</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>io.quarkiverse.langchain4j</groupId>
+            <artifactId>quarkus-langchain4j-openai</artifactId>
+            <version>${quarkus.langchain4j.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>

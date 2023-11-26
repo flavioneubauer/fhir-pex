@@ -28,7 +28,6 @@ public class QuarentineObservationEventListener {
 		var patientId = quarentineObservation.getSubject()
 				.getReference();
 		var patient = patientService.addObservation(patientId, quarentineObservation);
-		// passar para a IA uma lista de exames e os dados do paciente e pedir um próximo exame
 		eventBus.publish("monitor", MonitorEventDto.builder()
 				.id(patient.getId())
 				.message(" is on quarentine list by observation ." + quarentineObservation.getCode()
