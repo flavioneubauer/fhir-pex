@@ -15,7 +15,7 @@ Processes FHIR-formatted messages and directs them to Kafka topics based on glob
 - Handling Kafka Returns via External Java Backend:
 Interprets only the examinations directed to quarantine, enabling the system to handle returns from Kafka through an external Java backend. It facilitates the generation of prognostic insights for healthcare professionals through Generative AI, relying on consultations of previous examination results for the respective patients.
 
- <img src="https://raw.githubusercontent.com/flavioneubauer/fhir-pex/pex/docs/app.flow.png" alt="" />
+ <img src="https://raw.githubusercontent.com/flavioneubauer/fhir-pex/master/docs/app.flow.png" alt="" />
 
 ## Development
 
@@ -230,7 +230,7 @@ This segment of the system is tasked with persisting the information received fr
 
 Finally, the system's monitor is responsible for providing a simple front-end visualization. This allows healthcare professionals to review patient/examination data and take necessary actions.
 
-<img src="https://raw.githubusercontent.com/flavioneubauer/fhir-pex/pex/docs/monitor.png" alt="" />
+<img src="https://raw.githubusercontent.com/flavioneubauer/fhir-pex/master/docs/monitor.png" alt="" />
 
 ### Implementation of longchain4j  ChatGPT
 
