@@ -4,7 +4,7 @@ import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
 
-@RegisterAiService(tools = PatientService.class)
+@RegisterAiService(chatMemoryProviderSupplier = RegisterAiService.BeanChatMemoryProviderSupplier.class, tools = {PatientService.class})
 public interface PatientAI {
 
 	@SystemMessage("""
@@ -20,7 +20,7 @@ public interface PatientAI {
 
 			 Answer with a **single** JSON document containing:
 			 - the patient id in the 'patientId' key
-			 - the exam recommendation list in the 'recommendations' key
+			 - the exam recommendation list in the 'recommendations' key, with properties exam, reason and condition.
 			 - the 'explanation' key containing a explanation of your answer, especially about well known diseases.
 
 			Your response must be just the raw JSON document, without ```json, ``` or anything else.

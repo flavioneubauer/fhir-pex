@@ -21,15 +21,6 @@ public class DataInitialization {
 			patient1.setPhisicalActivitiesPerWeek(3);
 			patient1.setBloodPreasure("15:9");
 			patient1.persistAndFlush();
-
-			Patient patient2 = new Patient();
-			patient2.setReference("Patient/12345");
-			patient2.setDrinks(false);
-			patient2.setSmoke(true);
-			patient2.setWeight(100.2);
-			patient2.setPhisicalActivitiesPerWeek(1);
-			patient2.setBloodPreasure("10:9");
-			patient2.persistAndFlush();
 		}
 	}
 }

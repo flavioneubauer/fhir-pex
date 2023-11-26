@@ -1,31 +1,56 @@
 <!doctype html>
 <html>
+
 <head>
-    <meta charset="utf-8"/>
-    <title>FHIR Monitor</title>
-    <script src="https://unpkg.io/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
-    <script src='https://unpkg.io/@vertx/eventbus-bridge-client.js@1.0.0-1/vertx-eventbus.js'></script>
+  <meta charset="utf-8" />
+  <title>FHIR Monitor</title>
+  <script src="https://unpkg.io/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
+  <script src='https://unpkg.io/@vertx/eventbus-bridge-client.js@1.0.0-1/vertx-eventbus.js'></script>
 </head>
+
 <body>
 
-<h1>FHIR Monitor</h1>
+  <h1>FHIR Monitor</h1>
 
-<div id="container"></div>
+  <div id="container"></div>
 
 </body>
 <script>
-    var eb = new EventBus('http://localhost:8080/eventbus');
-    eb.enableReconnect(true);
+  var baseUrl = window.location.protocol + "//" + window.location.host;
+  var eb = new EventBus(baseUrl + '/eventbus');
+  eb.enableReconnect(true);
 
-    function askAI(id) {
-        console.log('asking AI for id ' + id);
-    }
+  function askAI(btn, id) {
+    btn.disabled = true;
+    btn.innerHTML = 'processing...';
+    const apiUrl = `${baseUrl}/patients/${id}/recomendations`;
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        alert(JSON.stringify(data));
+      })
+      .catch(error => {
+        // Handle errors
+        console.log('error during fetch', error);
+        alert('error fetching recommendatinos: ' + error);
+      })
+      .finally(() => {
+        btn.disabled = false;
+        btn.innerHTML = 'Ask for recommendation';
+      });
+  }
 
-    eb.onopen = function () {
-        eb.registerHandler('monitor', function (error, message) {
-            console.log('uhuu chegou',error, message);
-            document.getElementById('container').innerHTML += '<p>Patient ' +  message.body.id + message.body.message + '<button onclick="askAI(' + message.body.id + ')">Ask for recommendation</button></p>';
-        });
-    }
+  eb.onopen = function () {
+    eb.registerHandler('monitor', function (error, message) {
+      document.getElementById('container').innerHTML += '<p>Patient ' + message.body.id + message.body.message
+         + '&nbsp;<button onclick="askAI(this,' + message.body.id + ')">Ask for recommendation</button></p>';
+    });
+  }
 </script>
+
 </html>

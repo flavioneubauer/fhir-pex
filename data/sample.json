@@ -1,0 +1,40 @@
+{
+    "resourceType": "Observation",
+    "id": "2d0045a0-e6f3-4db8-8ad2-1b1a1769ea61",
+    "status": "final",
+    "category": [
+      {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+            "code": "laboratory",
+            "display": "laboratory"
+          }
+        ]
+      }
+    ],
+    "code": {
+      "coding": [
+        {
+          "system": "http://loinc.org",
+          "code": "2093-3",
+          "display": "Total Cholesterol"
+        }
+      ],
+      "text": "Total Cholesterol"
+    },
+    "subject": {
+      "reference": "urn:uuid:274f5452-2a39-44c4-a7cb-f36de467762e"
+    },
+    "encounter": {
+      "reference": "urn:uuid:100b4a8f-5c14-4192-a78f-7276abdc4bc3"
+    },
+    "effectiveDateTime": "2019-09-08T15:32:17+00:00",
+    "issued": "2019-09-08T15:32:17.188+00:00",
+    "valueQuantity": {
+      "value": 185.81,
+      "unit": "mg/dL",
+      "system": "http://unitsofmeasure.org",
+      "code": "mg/dL"
+    }
+  }
