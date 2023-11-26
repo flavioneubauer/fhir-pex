@@ -1,5 +1,20 @@
 version: "2.2"
 services:
+  quarkus-backend:
+    image: quarkus-quarentine-monitor:latest
+    build:
+      dockerfile: src/main/docker/Dockerfile.jvm
+      context: java-orm
+    ports:
+      - 8080:8080
+    restart: always
+    depends_on:
+      - iris
+      - kafka
+    environment:
+      - QUARKUS_LANGCHAIN4J_OPENAI_API_KEY=YOUR_KEY
+      - QUARKUS_DATASOURCE_JDBC_URL=jdbc:IRIS://iris:1972/USER
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
   jgw:
     image: intersystemsdc/pexoperation:latest
     environment:
@@ -49,7 +64,7 @@ services:
     environment:
       - 'KAFKA_BROKER_ID=1'
       - 'KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181'
-      - 'KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092'
+      - 'KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:29092,PLAINTEXT_HOST://kafka:9092'
       - 'KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
       - 'KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT'
       - 'KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1'
