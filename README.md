@@ -26,6 +26,11 @@ The project also includes a Java application that consumes messages from the "ob
 
 This Java application, send a messages to U.I Monitor quarantine, where there is an integration with ChatGPT, implemented using langchain4j, to recommend future exams to the patient, through their health history.
 
+
+### Article - how it works
+
+[Sending Kafka messages via JAVA PEX for processing quarantine exam prognoses.](https://github.com/flavioneubauer/fhir-pex/blob/master/POST_EN.md)
+
 ### Prerequisites
 
 Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [Docker desktop](https://www.docker.com/products/docker-desktop) installed.

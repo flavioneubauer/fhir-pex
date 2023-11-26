@@ -2,7 +2,7 @@
 
 This article aims to explore how the FHIR-PEX system operates and was developed, leveraging the capabilities of InterSystems IRIS.
 
-Streamlining the identification and processing of medical examinations in clinical diagnostic centers, our system aims to enhance the efficiency and accuracy of healthcare workflows. By  integrating FHIR standards witgh InterSystems IRIS database Java-PEX, the system help healthcare professionals with  validation and routing capabilities, ultimately contributing to improved decision-making and patient care.
+Streamlining the identification and processing of medical examinations in clinical diagnostic centers, our system aims to enhance the efficiency and accuracy of healthcare workflows. By  integrating FHIR standards with InterSystems IRIS database Java-PEX, the system help healthcare professionals with  validation and routing capabilities, ultimately contributing to improved decision-making and patient care.
 
 ## how it works
 
@@ -232,7 +232,7 @@ Finally, the system's monitor is responsible for providing a simple front-end vi
 
 <img src="https://raw.githubusercontent.com/flavioneubauer/fhir-pex/master/docs/monitor.png" alt="" />
 
-### Implementation of longchain4j  ChatGPT
+### Implementation of langchainPT
 
 Through the monitor, the system enables healthcare professionals to request recommendations from the Generative AI.
 
@@ -257,7 +257,7 @@ Through the monitor, the system enables healthcare professionals to request reco
     }
 
 
-segue implementação de longchain4j
+segue implementação de langchain4j
 
     @RegisterAiService(chatMemoryProviderSupplier = RegisterAiService.BeanChatMemoryProviderSupplier.class, tools = {PatientRepository.class})
     public interface PatientAI {
