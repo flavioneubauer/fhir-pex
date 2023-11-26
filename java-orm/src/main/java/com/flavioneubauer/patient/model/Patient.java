@@ -1,6 +1,5 @@
 package com.flavioneubauer.patient.model;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @Setter
 @Getter
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"id"}, callSuper = true)
 @Entity
 public class Patient extends PanacheEntityBase {
 	@Id

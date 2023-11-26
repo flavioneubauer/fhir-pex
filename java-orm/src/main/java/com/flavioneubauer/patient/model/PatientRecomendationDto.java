@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 public class PatientRecomendationDto {
 	private String patientId;
+	private String weight;
 	private List<RecommendationDto> recommendations = new ArrayList<>();
 	private String explanation;
 }

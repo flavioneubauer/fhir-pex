@@ -1,6 +1,5 @@
 package com.flavioneubauer.patient.model;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -11,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = { "id", "type", "measure" })
+@EqualsAndHashCode(of = { "id" }, callSuper = true)
 @Entity
 public class Observation extends PanacheEntityBase {
 
@@ -19,7 +18,8 @@ public class Observation extends PanacheEntityBase {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	private Long id;
-	private String type;
+	private String name;
+	private String code;
 	private LocalDateTime timestamp;
-	private String measure;
+	private String value;
 }
