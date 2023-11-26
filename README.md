@@ -24,6 +24,8 @@ set ^quarantineRule("94531-1","http://loinc.org") = $LB("valueCodeableConcept","
 
 The project also includes a Java application that consumes messages from the "observation_quarantine" topic and persists them in the IRIS database using ORM with Quarkus, specifically employing the Quarkus Hibernate ORM dialect: quarkus.hibernate-orm.dialect=io.github.yurimarx.hibernateirisdialect.InterSystemsIRISDialect.
 
+This Java application, send a messages to U.I Monitor quarantine, where there is an integration with ChatGPT, implemented using langchain4j, to recommend future exams to the patient, through their health history.
+
 ### Prerequisites
 
 Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [Docker desktop](https://www.docker.com/products/docker-desktop) installed.
@@ -34,6 +36,26 @@ Clone/git pull the repo into any local directory
 
 ```sh
 $ git clone https://github.com/flavioneubauer/fhir-pex.git
+```
+
+To enable integration with chatGPT, enter your OPENAI_API_KEY by changing the quarkus-backend environment
+
+```
+  quarkus-backend:
+    image: quarkus-quarentine-monitor:latest
+    build:
+      dockerfile: src/main/docker/Dockerfile.jvm
+      context: java-orm
+    ports:
+      - 8080:8080
+    restart: always
+    depends_on:
+      - iris
+      - kafka
+    environment:
+      - QUARKUS_LANGCHAIN4J_OPENAI_API_KEY=YOUR_KEY
+      - QUARKUS_DATASOURCE_JDBC_URL=jdbc:IRIS://iris:1972/USER
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
 ```
 
 Open the terminal in this directory and run:
