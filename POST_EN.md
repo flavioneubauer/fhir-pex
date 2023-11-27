@@ -1,3 +1,7 @@
+# Sending Kafka messages via JAVA PEX for processing quarantine exam prognoses.
+
+[Read the article published in the community](https://community.intersystems.com/post/sending-kafka-messages-java-pex-processing-quarantine-exam-prognoses)
+
 # Introduction
 
 This article aims to explore how the FHIR-PEX system operates and was developed, leveraging the capabilities of InterSystems IRIS.
