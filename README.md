@@ -6,7 +6,7 @@ The FHIR-Kafka application leverages the interoperability capabilities of the PE
 
 When the system receives a FHIR message through Kafka, it is processed within a Java PEX, and then forwarded to topics based on rules configured in globals.
 
- ![](https://raw.githubusercontent.com/flavioneubauer/fhir-pex/pex/docs/pex_flow.png)
+ <img src="https://raw.githubusercontent.com/flavioneubauer/fhir-pex/master/docs/app.flow.png" alt="" />
 
 sample:
 ```
